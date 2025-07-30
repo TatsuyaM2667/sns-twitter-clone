@@ -13,7 +13,7 @@ const Timeline = ({ user, profile, tweets, loading, theme, onLike, onReply, repl
           {loading ? (
             <div style={{ textAlign: 'center', color: '#888' }}>読み込み中...</div>
           ) : (
-            <TweetList tweets={tweets} user={user} onLike={onLike} onReply={onReply} repliesMap={repliesMap} likedMap={likedMap} onDelete={onDelete} onImpression={onImpression} />
+            <TweetList tweets={tweets} user={user} onLike={onLike} onReply={onReply} repliesMap={repliesMap} likedMap={likedMap} onDelete={onDelete} onImpression={onImpression} theme={theme} />
           )}
           <button
             onClick={() => navigate('/tweet')}

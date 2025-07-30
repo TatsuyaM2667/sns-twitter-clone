@@ -1,7 +1,7 @@
 import React from 'react';
 import TweetItem from './TweetItem';
 
-const TweetList = ({ tweets, user, onLike, onReply, repliesMap, likedMap, onDelete, onImpression }) => (
+const TweetList = ({ tweets, user, onLike, onReply, repliesMap, likedMap, onDelete, onImpression, theme }) => (
   <ul style={{ listStyle: 'none', padding: 0 }}>
     {tweets.map((tweet, idx) => (
       <TweetItem
@@ -14,6 +14,7 @@ const TweetList = ({ tweets, user, onLike, onReply, repliesMap, likedMap, onDele
         liked={likedMap?.[tweet.id] || false}
         onDelete={onDelete}
         onImpression={onImpression}
+        theme={theme}
       />
     ))}
   </ul>

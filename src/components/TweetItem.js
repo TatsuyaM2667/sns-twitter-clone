@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaHeart, FaRegHeart, FaReply, FaTrash, FaEye } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-const TweetItem = ({ tweet, user, onLike, onReply, replies, liked, onDelete, onImpression }) => {
+const TweetItem = ({ tweet, user, onLike, onReply, replies, liked, onDelete, onImpression, theme }) => {
   const [showReply, setShowReply] = useState(false);
   const [replyText, setReplyText] = useState('');
 
@@ -47,7 +47,8 @@ const TweetItem = ({ tweet, user, onLike, onReply, replies, liked, onDelete, onI
         {tweet.imageUrl && (
           <img src={tweet.imageUrl} alt="tweet-img" style={{ maxWidth: 240, borderRadius: 8, marginBottom: 8 }} />
         )}
-        <div style={{ marginBottom: 8 }}>{tweet.text}</div>
+        
+        <div style={{ marginBottom: 8, color: theme === 'dark' ? '#e3f2fd' : '#222' }}>{tweet.text}</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <button onClick={() => onLike(tweet.id)} style={{ background: 'none', border: 'none', color: liked ? '#e53935' : '#888', cursor: 'pointer', display: 'flex', alignItems: 'center', fontSize: 16 }}>
             {liked ? <FaHeart /> : <FaRegHeart />} <span style={{ marginLeft: 4 }}>{tweet.likes?.length || 0}</span>

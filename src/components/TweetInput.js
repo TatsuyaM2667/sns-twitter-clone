@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-const CLOUD_NAME = 'demo'; // サンプル値
-const UPLOAD_PRESET = 'ml_default'; // サンプル値
+const CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+const UPLOAD_PRESET = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
 
 const TweetInput = ({ onTweet }) => {
   const [text, setText] = useState('');
@@ -10,22 +10,32 @@ const TweetInput = ({ onTweet }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!text.trim() && !image) return;
     setUploading(true);
     let imageUrl = '';
-    if (image) {
-      const formData = new FormData();
-      formData.append('file', image);
-      formData.append('upload_preset', UPLOAD_PRESET);
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
-      imageUrl = data.secure_url;
+    try {
+      if (image) {
+        const formData = new FormData();
+        formData.append('file', image);
+        formData.append('upload_preset', UPLOAD_PRESET);
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await res.json();
+      if (res.ok) {
+        imageUrl = data.secure_url;
+      } else {
+        throw new Error(data.error.message || '画像のアップロードに失敗しました');
+      }
+      }
+      onTweet(text, imageUrl);
+      setText('');
+      setImage(null);
+    } catch (error) {
+      console.error("Tweet submission error:", error);
+      alert(error.message);
     }
-    onTweet(text, imageUrl);
-    setText('');
-    setImage(null);
     setUploading(false);
   };
 

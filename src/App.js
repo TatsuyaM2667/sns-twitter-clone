@@ -6,7 +6,7 @@ import Profile from './pages/Profile';
 import AuthForm from './components/AuthForm';
 import { auth, db } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc, getDoc, updateDoc, arrayUnion, arrayRemove, collectionGroup, onSnapshot as onSnapshotReplies, addDoc as addReplyDoc, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc, getDoc, updateDoc, arrayUnion, arrayRemove, collectionGroup, onSnapshot as onSnapshotReplies, addDoc as addReplyDoc, deleteDoc, getDocs, where } from 'firebase/firestore';
 import { FaHome, FaEnvelope, FaUser, FaMoon, FaSun } from 'react-icons/fa';
 import TweetList from './components/TweetList';
 import './App.css';
@@ -14,6 +14,7 @@ import ProfileEditPage from './pages/ProfileEditPage';
 import UserProfile from './pages/UserProfile';
 import SearchBar from './components/SearchBar';
 import TweetPostPage from './pages/TweetPostPage';
+import NotificationList from './pages/NotificationList';
 
 function Sidebar({ theme, setTheme }) {
   const location = useLocation();
@@ -61,6 +62,19 @@ function Sidebar({ theme, setTheme }) {
           >
             <span style={{ marginRight: 16, fontSize: 22 }}>{item.icon}</span>
             {item.label}
+            {item.count > 0 && (
+              <span style={{
+                marginLeft: 'auto',
+                background: '#e53935',
+                color: '#fff',
+                borderRadius: '50%',
+                padding: '2px 8px',
+                fontSize: 12,
+                fontWeight: 'bold',
+              }}>
+                {item.count}
+              </span>
+            )}
           </Link>
         ))}
       </nav>
@@ -167,16 +181,41 @@ function App() {
     setProfile(newProfile);
   };
 
-  const handleTweet = async (text) => {
+  const handleTweet = async (text, imageUrl) => {
     if (!user || !profile) return;
-    await addDoc(collection(db, 'tweets'), {
+    const tweetData = {
       text,
       uid: user.uid,
       email: user.email,
       displayName: profile.displayName,
       photoURL: profile.photoURL,
       createdAt: serverTimestamp(),
-    });
+    };
+    if (imageUrl) {
+      tweetData.imageUrl = imageUrl;
+    }
+    const newTweetRef = await addDoc(collection(db, 'tweets'), tweetData);
+
+    // ツイート通知の作成
+    // 1. 投稿者のフォロワーリストを取得
+    const userRef = doc(db, 'users', user.uid);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      const userData = userSnap.data();
+      const followers = userData.followers || []; // フォロワーのUID配列
+
+      // 2. 各フォロワーに通知を作成
+      for (const followerUid of followers) {
+        await addDoc(collection(db, 'notifications'), {
+          type: 'tweet',
+          fromUid: user.uid,
+          toUid: followerUid,
+          tweetId: newTweetRef.id, // 新しく作成されたツイートのID
+          read: false,
+          createdAt: serverTimestamp(),
+        });
+      }
+    }
   };
 
   // いいねのトグル
@@ -287,6 +326,7 @@ function App() {
             <Route path="/profile/edit" element={<ProfileEditPage user={user} profile={profile} onProfileUpdated={handleProfileUpdated} theme={theme} />} />
             <Route path="/user/:uid" element={<UserProfile currentUser={user} theme={theme} onLike={handleLike} onReply={handleReply} repliesMap={repliesMap} likedMap={likedMap} onDelete={handleDeleteTweet} onImpression={handleImpression} />} />
             <Route path="/tweet" element={<TweetPostPage onTweet={handleTweet} theme={theme} />} />
+            <Route path="/notifications" element={<NotificationList user={user} theme={theme} />} />
           </Routes>
         </main>
       </div>

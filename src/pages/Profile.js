@@ -27,10 +27,15 @@ const Profile = ({ user, profile, tweets, theme, onLike, onReply, repliesMap, li
         <div style={{ color: '#888', fontSize: 16, marginBottom: 8 }}>@{user?.email?.split('@')[0]}</div>
         {/* 自己紹介欄（今後拡張可） */}
         {profile?.bio && <div style={{ marginBottom: 16, color: theme === 'dark' ? '#e3f2fd' : '#222' }}>{profile.bio}</div>}
+        <div style={{ display: 'flex', gap: 16, color: theme === 'dark' ? '#e3f2fd' : '#222' }}>
+          <div><strong>{myTweets.length}</strong> 投稿</div>
+          <div><strong>{profile?.followers?.length || 0}</strong> フォロワー</div>
+          <div><strong>{profile?.following?.length || 0}</strong> フォロー</div>
+        </div>
       </div>
       <div style={{ borderTop: '1px solid #eee', background: theme === 'dark' ? '#23272f' : '#fafbfc', padding: '24px 32px' }}>
         <h3 style={{ margin: 0, marginBottom: 16, color: theme === 'dark' ? '#e3f2fd' : '#1976d2', fontSize: 20 }}>投稿</h3>
-        <TweetList tweets={myTweets} user={user} onLike={onLike} onReply={onReply} repliesMap={repliesMap} likedMap={likedMap} onDelete={onDelete} onImpression={onImpression} />
+        <TweetList tweets={myTweets} user={user} onLike={onLike} onReply={onReply} repliesMap={repliesMap} likedMap={likedMap} onDelete={onDelete} onImpression={onImpression} theme={theme} />
       </div>
     </div>
   );

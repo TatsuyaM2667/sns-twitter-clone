@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { db, auth } from '../firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
-const CLOUD_NAME = 'dq1olxp17'; 
-const UPLOAD_PRESET = 'unsigned_preset'; 
+const CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+const UPLOAD_PRESET = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET; 
 
 const ProfileEdit = ({ user, profile, onProfileUpdated }) => {
+  const navigate = useNavigate();
   const [displayName, setDisplayName] = useState(profile?.displayName || '');
   const [photoURL, setPhotoURL] = useState(profile?.photoURL || '');
   const [coverURL, setCoverURL] = useState(profile?.coverURL || '');
@@ -48,9 +50,13 @@ const ProfileEdit = ({ user, profile, onProfileUpdated }) => {
         body: formData,
       });
       const data = await res.json();
-      setCoverURL(data.secure_url);
+      if (res.ok) {
+        setCoverURL(data.secure_url);
+      } else {
+        throw new Error(data.error.message || 'カバー画像のアップロードに失敗しました');
+      }
     } catch (err) {
-      setError('カバー画像のアップロードに失敗しました');
+      setError(err.message);
     }
     setUploading(false);
   };
@@ -67,7 +73,9 @@ const ProfileEdit = ({ user, profile, onProfileUpdated }) => {
         email: user.email,
       });
       if (onProfileUpdated) onProfileUpdated({ displayName, photoURL, coverURL, bio });
+      navigate('/profile');
     } catch (err) {
+      console.error("Firestore save error:", err);
       setError('保存に失敗しました');
     }
   };

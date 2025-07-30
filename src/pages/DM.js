@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { collection, getDocs, query, orderBy, onSnapshot, addDoc, doc, setDoc, serverTimestamp, updateDoc, getDoc, deleteDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import DMThreadList from '../components/DMThreadList';
@@ -9,6 +10,8 @@ function getThreadId(uid1, uid2) {
 }
 
 const DM = ({ user, theme }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [threads, setThreads] = useState([]);
   const [selectedThread, setSelectedThread] = useState(null);
@@ -125,13 +128,44 @@ const DM = ({ user, theme }) => {
     });
   };
 
+  // URLクエリからrecipientIdを取得してスレッドを開く
+  useEffect(() => {
+    if (!user || !users.length) return;
+    const params = new URLSearchParams(location.search);
+    const recipientId = params.get('recipientId');
+    if (recipientId) {
+      const recipient = users.find(u => u.uid === recipientId);
+      if (recipient) {
+        const threadId = getThreadId(user.uid, recipientId);
+        const existingThread = threads.find(t => t.id === threadId);
+        if (existingThread) {
+          setSelectedThread(existingThread);
+        } else {
+          // 新規スレッドを作成して選択
+          const newThread = {
+            id: threadId,
+            partners: [recipient],
+            lastMessage: null,
+            unreadCount: 0,
+            pinned: false,
+          };
+          setDoc(doc(db, 'dms', threadId), { users: [user.uid, recipientId] });
+          setThreads([newThread, ...threads]);
+          setSelectedThread(newThread);
+        }
+        // URLからクエリを削除
+        navigate('/dm', { replace: true });
+      }
+    }
+  }, [user, users, threads, location.search, navigate]);
+
   // 通知バッジ（未読数合計）
   const unreadTotal = threads.reduce((sum, t) => sum + (t.unreadCount || 0), 0);
 
   return (
     <div style={{ display: 'flex', height: '70vh', minHeight: 400, background: theme === 'dark' ? '#23272f' : '#fff', borderRadius: 12, overflow: 'hidden', boxShadow: theme === 'dark' ? '0 2px 16px rgba(0,0,0,0.24)' : '0 2px 16px rgba(0,0,0,0.06)' }}>
-      <DMThreadList threads={threads} currentUser={user} onSelect={setSelectedThread} selectedThreadId={selectedThread?.id} onPin={handlePinThread} pinned={pinned} />
-      <DMThread messages={messages} onSend={handleSend} partner={partner} currentUser={user} onRead={handleRead} onDelete={handleDeleteMessage} />
+      <DMThreadList threads={threads} currentUser={user} onSelect={setSelectedThread} selectedThreadId={selectedThread?.id} onPin={handlePinThread} pinned={pinned} theme={theme} />
+      <DMThread messages={messages} onSend={handleSend} partner={partner} currentUser={user} onRead={handleRead} onDelete={handleDeleteMessage} theme={theme} selectedThread={selectedThread} />
       {unreadTotal > 0 && (
         <div style={{ position: 'fixed', left: 16, top: 16, background: '#e53935', color: '#fff', borderRadius: 16, padding: '4px 12px', fontSize: 14, zIndex: 999 }}>
           新着DM {unreadTotal}

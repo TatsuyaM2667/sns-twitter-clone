@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaTrash } from 'react-icons/fa';
+import { addDoc, collection, serverTimestamp, doc } from 'firebase/firestore';
+import { db } from '../firebase';
 
-const CLOUD_NAME = 'dq1olxp17'; 
-const UPLOAD_PRESET = 'unsigned_preset'; 
+const CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+const UPLOAD_PRESET = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET; 
 
-const DMThread = ({ messages, onSend, partner, currentUser, onRead, onDelete }) => {
+const DMThread = ({ messages, onSend, partner, currentUser, onRead, onDelete, theme, selectedThread }) => {
   const [text, setText] = useState('');
   const [image, setImage] = useState(null);
   const bottomRef = useRef(null);
@@ -37,6 +39,18 @@ const DMThread = ({ messages, onSend, partner, currentUser, onRead, onDelete }) 
     onSend(text, imageUrl);
     setText('');
     setImage(null);
+
+    // DM通知の作成
+    if (partner && currentUser && partner.uid !== currentUser.uid) { // 自分自身へのDMは通知しない
+      await addDoc(collection(db, 'notifications'), {
+        type: 'dm',
+        fromUid: currentUser.uid,
+        toUid: partner.uid,
+        dmThreadId: selectedThread.id, // 現在のスレッドID
+        read: false,
+        createdAt: serverTimestamp(),
+      });
+    }
   };
 
   return (
@@ -57,14 +71,16 @@ const DMThread = ({ messages, onSend, partner, currentUser, onRead, onDelete }) 
             <div
               style={{
                 display: 'inline-block',
-                background: msg.uid === currentUser?.uid ? '#1976d2' : '#fff',
-                color: msg.uid === currentUser?.uid ? '#fff' : '#222',
+                background: msg.uid === currentUser?.uid ? '#1976d2' : (theme === 'dark' ? '#333' : '#fff'),
+                color: msg.uid === currentUser?.uid ? '#fff' : (theme === 'dark' ? '#e3f2fd' : '#222'),
                 borderRadius: 16,
                 padding: '8px 16px',
                 maxWidth: 320,
                 wordBreak: 'break-word',
                 fontSize: 15,
                 position: 'relative',
+                border: msg.uid === currentUser?.uid ? 'none' : (theme === 'dark' ? '1px solid #555' : '1px solid #ccc'),
+                border: msg.uid === currentUser?.uid ? 'none' : (theme === 'dark' ? '1px solid #555' : '1px solid #ccc'),
               }}
             >
               {msg.imageUrl && (
@@ -94,7 +110,7 @@ const DMThread = ({ messages, onSend, partner, currentUser, onRead, onDelete }) 
             value={text}
             onChange={e => setText(e.target.value)}
             placeholder="メッセージを入力..."
-            style={{ flex: 1, padding: 8, borderRadius: 8, border: '1px solid #ccc', marginRight: 8 }}
+            style={{ flex: 1, padding: 8, borderRadius: 8, border: theme === 'dark' ? '1px solid #555' : '1px solid #ccc', marginRight: 8, background: theme === 'dark' ? '#444' : '#fff', color: theme === 'dark' ? '#e3f2fd' : '#222' }}
           />
           <input type="file" accept="image/*" onChange={e => setImage(e.target.files[0])} style={{ marginRight: 8 }} />
           <button type="submit" style={{ padding: '8px 16px', borderRadius: 8, background: '#1976d2', color: '#fff', border: 'none' }}>

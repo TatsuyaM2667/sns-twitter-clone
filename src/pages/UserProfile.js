@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { doc, getDoc, collection, query, where, getDocs, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import TweetList from '../components/TweetList';
+import { FaEnvelope } from 'react-icons/fa';
 
 const UserProfile = ({ currentUser, theme, onLike, onReply, repliesMap, likedMap, onDelete, onImpression }) => {
   const { uid } = useParams();
+  const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [userTweets, setUserTweets] = useState([]);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -65,11 +67,20 @@ const UserProfile = ({ currentUser, theme, onLike, onReply, repliesMap, likedMap
       <div style={{ padding: '64px 32px 24px 32px', position: 'relative' }}>
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 16 }}>
           {currentUser && currentUser.uid !== uid && (
-            <button
-              onClick={handleFollow}
-              style={{ background: isFollowing ? '#fff' : (theme === 'dark' ? '#23272f' : '#e3f2fd'), color: isFollowing ? '#1976d2' : (theme === 'dark' ? '#e3f2fd' : '#1976d2'), border: isFollowing ? '1px solid #1976d2' : 'none', borderRadius: 20, padding: '8px 20px', fontWeight: 700, cursor: 'pointer', fontSize: 15 }}>
-              {isFollowing ? 'フォロー中' : 'フォロー'}
-            </button>
+            <>
+              <button
+                onClick={() => navigate(`/dm?recipientId=${uid}`)}
+                style={{ background: 'none', border: '1px solid #ccc', borderRadius: 20, padding: '8px 12px', cursor: 'pointer' }}
+                title="メッセージを送る"
+              >
+                <FaEnvelope />
+              </button>
+              <button
+                onClick={handleFollow}
+                style={{ background: isFollowing ? '#fff' : (theme === 'dark' ? '#23272f' : '#e3f2fd'), color: isFollowing ? '#1976d2' : (theme === 'dark' ? '#e3f2fd' : '#1976d2'), border: isFollowing ? '1px solid #1976d2' : 'none', borderRadius: 20, padding: '8px 20px', fontWeight: 700, cursor: 'pointer', fontSize: 15 }}>
+                {isFollowing ? 'フォロー中' : 'フォロー'}
+              </button>
+            </>
           )}
         </div>
         <h2 style={{ margin: '8px 0 0 0', fontSize: 28, color: theme === 'dark' ? '#e3f2fd' : '#222' }}>{userData.displayName || userData.email}</h2>
@@ -82,7 +93,7 @@ const UserProfile = ({ currentUser, theme, onLike, onReply, repliesMap, likedMap
       </div>
       <div style={{ borderTop: '1px solid #eee', background: theme === 'dark' ? '#23272f' : '#fafbfc', padding: '24px 32px' }}>
         <h3 style={{ margin: 0, marginBottom: 16, color: theme === 'dark' ? '#e3f2fd' : '#1976d2', fontSize: 20 }}>投稿</h3>
-        <TweetList tweets={userTweets} user={currentUser} onLike={onLike} onReply={onReply} repliesMap={repliesMap} likedMap={likedMap} onDelete={onDelete} onImpression={onImpression} />
+        <TweetList tweets={userTweets} user={currentUser} onLike={onLike} onReply={onReply} repliesMap={repliesMap} likedMap={likedMap} onDelete={onDelete} onImpression={onImpression} theme={theme} />
       </div>
     </div>
   );
