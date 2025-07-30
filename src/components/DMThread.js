@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaTrash } from 'react-icons/fa';
 
-const CLOUD_NAME = 'demo'; // サンプル値
-const UPLOAD_PRESET = 'ml_default'; // サンプル値
+const CLOUD_NAME = 'dq1olxp17'; 
+const UPLOAD_PRESET = 'unsigned_preset'; 
 
 const DMThread = ({ messages, onSend, partner, currentUser, onRead, onDelete }) => {
   const [text, setText] = useState('');
