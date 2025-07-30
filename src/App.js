@@ -41,7 +41,7 @@ function Sidebar({ theme, setTheme }) {
       zIndex: 200,
       boxShadow: theme === 'dark' ? '2px 0 8px rgba(0,0,0,0.24)' : '2px 0 8px rgba(0,0,0,0.04)'
     }}>
-      <h1 style={{ textAlign: 'center', fontWeight: 700, color: theme === 'dark' ? '#e3f2fd' : '#1976d2', fontSize: 22, marginBottom: 32, letterSpacing: 1 }}>SNS<br />Twitter Clone</h1>
+      <h1 style={{ textAlign: 'center', fontWeight: 700, color: theme === 'dark' ? '#e3f2fd' : '#1976d2', fontSize: 22, marginBottom: 32, letterSpacing: 1 }}>Tsubuyaki</h1>
       <nav style={{ flex: 1 }}>
         {navItems.map(item => (
           <Link
@@ -62,6 +62,19 @@ function Sidebar({ theme, setTheme }) {
           >
             <span style={{ marginRight: 16, fontSize: 22 }}>{item.icon}</span>
             {item.label}
+            {item.count > 0 && (
+              <span style={{
+                marginLeft: 'auto',
+                background: '#e53935',
+                color: '#fff',
+                borderRadius: '50%',
+                padding: '2px 8px',
+                fontSize: 12,
+                fontWeight: 'bold',
+              }}>
+                {item.count}
+              </span>
+            )}
             {item.count > 0 && (
               <span style={{
                 marginLeft: 'auto',
@@ -282,7 +295,7 @@ function App() {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: theme === 'dark' ? '#121212' : '#fafbfc' }}>
         <div style={{ maxWidth: 400, width: '100%', padding: 32, borderRadius: 16, background: theme === 'dark' ? '#23272f' : '#fff', boxShadow: theme === 'dark' ? '0 2px 16px rgba(0,0,0,0.24)' : '0 2px 16px rgba(0,0,0,0.06)' }}>
-          <h1 style={{ textAlign: 'center', fontWeight: 700, color: theme === 'dark' ? '#e3f2fd' : '#1976d2', marginBottom: 24, fontSize: 28 }}>SNS Twitter Clone</h1>
+          <h1 style={{ textAlign: 'center', fontWeight: 700, color: theme === 'dark' ? '#e3f2fd' : '#1976d2', marginBottom: 24, fontSize: 28 }}>SNS つぶやき</h1>
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             style={{
@@ -322,7 +335,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Timeline user={user} profile={profile} tweets={renderTweets} loading={loading} theme={theme} onLike={handleLike} onReply={handleReply} repliesMap={repliesMap} likedMap={likedMap} onDelete={handleDeleteTweet} onImpression={handleImpression} />} />
             <Route path="/dm" element={<DM user={user} theme={theme} />} />
-            <Route path="/profile" element={<Profile user={user} profile={profile} onProfileUpdated={handleProfileUpdated} tweets={renderTweets} theme={theme} onLike={handleLike} onReply={handleReply} repliesMap={repliesMap} likedMap={likedMap} />} />
+            <Route path="/profile" element={<Profile user={user} profile={profile} onProfileUpdated={handleProfileUpdated} tweets={renderTweets} theme={theme} onLike={handleLike} onReply={handleReply} repliesMap={repliesMap} likedMap={likedMap} onDelete={handleDeleteTweet} />} />
             <Route path="/profile/edit" element={<ProfileEditPage user={user} profile={profile} onProfileUpdated={handleProfileUpdated} theme={theme} />} />
             <Route path="/user/:uid" element={<UserProfile currentUser={user} theme={theme} onLike={handleLike} onReply={handleReply} repliesMap={repliesMap} likedMap={likedMap} onDelete={handleDeleteTweet} onImpression={handleImpression} />} />
             <Route path="/tweet" element={<TweetPostPage onTweet={handleTweet} theme={theme} />} />
