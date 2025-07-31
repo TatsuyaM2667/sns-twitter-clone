@@ -41,18 +41,20 @@
  * Firebase アカウント
  * Cloudinary アカウント
 #### 1. リポジトリのクローン
+```bash
 git clone https://github.com/TatsuyaM2667/sns-twitter-clone.git
 cd sns-twitter-clone
-
-2. 依存関係のインストール
+```
+#### 2. 依存関係のインストール
 プロジェクトルートディレクトリで、モバイルとデスクトップ両方の依存関係をインストールします。
+```bash
 # 全体の依存関係
 npm install # または yarn install
 
 # Electronアプリの依存関係（もし別のフォルダにある場合）
 # 例: cd electron-app && npm install
-
-3. Firebase プロジェクトのセットアップ
+```
+#### 3. Firebase プロジェクトのセットアップ
  * Firebase コンソールにアクセスし、新しいプロジェクトを作成します。
  * プロジェクト内で Authentication を有効にし、使用したいサインインプロバイダ（例: メール/パスワード、Googleなど）を有効にします。
  * Firestore または Realtime Database を作成し、テスト用に適切なセキュリティルールを設定します。（本番環境ではより厳密なルール設定が必要です）
@@ -60,8 +62,9 @@ npm install # または yarn install
 4. Cloudinary アカウントのセットアップ
  * Cloudinary にサインアップまたはログインします。
  * ダッシュボードから、Cloud name, API Key, API Secret を控えておきます。
-5. 環境変数の設定
+#### 5. 環境変数の設定
 プロジェクトのルートに .env ファイルを作成し、以下の情報を記述します。これらの変数は、アプリケーションのコード内でアクセスされます。
+```bash
 # Firebase Configuration
 REACT_APP_FIREBASE_API_KEY=YOUR_FIREBASE_API_KEY
 REACT_APP_FIREBASE_AUTH_DOMAIN=YOUR_FIREBASE_AUTH_DOMAIN
@@ -75,11 +78,14 @@ REACT_APP_FIREBASE_MEASUREMENT_ID=YOUR_FIREBASE_MEASUREMENT_ID # 必要であれ
 REACT_APP_CLOUDINARY_CLOUD_NAME=YOUR_CLOUDINARY_CLOUD_NAME
 REACT_APP_CLOUDINARY_API_KEY=YOUR_CLOUDINARY_API_KEY
 REACT_APP_CLOUDINARY_API_SECRET=YOUR_CLOUDINARY_API_SECRET
-
+```
 注意: API_SECRET はクライアントサイドのコードに直接含めず、サーバーサイド（例えば、Firebase Functions など）で処理するようにしてください。このクローンアプリの規模によってはクライアントサイドから直接アップロードするケースもありますが、セキュリティを考慮するとサーバーサイドでの処理が推奨されます。
-6. アプリケーションの実行
+#### 6. アプリケーションの実行
+
 モバイルアプリ (React Native)
+```bash
 # iOSシミュレーターで実行
+
 npx react-native run-ios
 
 # Androidエミュレーターで実行
@@ -88,10 +94,6 @@ npx react-native run-android
 デスクトップアプリ (Electron)
 # 開発モードで実行
 npm run electron-dev # または yarn electron-dev
-
+```
 （※package.json の scripts に合わせてコマンドを調整してください）
-🤝 貢献 (Contribution)
-プロジェクトへの貢献は大歓迎です！
-バグ報告や機能改善の提案、新しい機能の追加など、お気軽にお願いいたします。
-📄 ライセンス
-このプロジェクトは MIT License の下で公開されています。
+
