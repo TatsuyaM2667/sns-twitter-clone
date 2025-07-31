@@ -23,24 +23,24 @@
  ### スタイル:
    * CSS / Styled Components / Tailwind CSS など: UIのスタイリング。
  ### バックエンド / データベース:
-   #### Firebase:
-     * Firebase Authentication: ユーザー認証システム。
-     * Firestore / Realtime Database: 投稿データやユーザーデータの保存とリアルタイム同期。
+   Firebase:
+     *Firebase Authentication: ユーザー認証システム。
+     *Firestore / Realtime Database: 投稿データやユーザーデータの保存とリアルタイム同期。
    * Cloudinary: 画像のアップロード、保存、配信、最適化。
-💡 プロジェクトの狙い / 工夫した点
+### プロジェクトの狙い / 工夫した点
  * クロスプラットフォーム開発の挑戦: React NativeとElectronを組み合わせることで、Web技術をベースにしながら、モバイルとデスクトップの両方でネイティブに近い体験を提供することを目指しました。これにより、開発効率の向上と、幅広いユーザーへのリーチを可能にしています。
  * Twitterのコア機能の再現: ソーシャルネットワーキングの基本的な要素（投稿、タイムライン、インタラクション、画像投稿）をシンプルに実装し、その動作原理を理解することに焦点を当てています。
  * 堅牢なバックエンドの構築: Firebaseを認証とデータストアに、Cloudinaryを画像管理に利用することで、スケーラブルで安定したバックエンドシステムを効率的に構築しています。
  * 学習と実験: 各フレームワークの特性や、異なる環境での開発プロセス、そして外部サービスとの連携を学ぶための実践的なプロジェクトです。
-🚀 セットアップ方法 (開発者向け)
+### セットアップ方法 (開発者向け)
 このプロジェクトをローカル環境で動かすための手順です。
-前提条件
+#### 前提条件
  * Node.js (LTS推奨)
  * npm または Yarn
  * （モバイルアプリ開発の場合）Xcode (macOS) / Android Studio
  * Firebase アカウント
  * Cloudinary アカウント
-1. リポジトリのクローン
+#### 1. リポジトリのクローン
 git clone https://github.com/TatsuyaM2667/sns-twitter-clone.git
 cd sns-twitter-clone
 
