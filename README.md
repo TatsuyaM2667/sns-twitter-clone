@@ -96,4 +96,5 @@ npx react-native run-android
 npm run electron-dev # または yarn electron-dev
 ```
 （※package.json の scripts に合わせてコマンドを調整してください）
-
+## 👨‍💻 作者
+- [TatsuyaM2667](https://github.com/TatsuyaM2667)
