@@ -22,7 +22,6 @@
     "eject": "react-scripts eject",
     "electron": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "dist": "npm run build && electron-builder"
-
   },
   "eslintConfig": {
     "extends": [
@@ -46,6 +45,7 @@
   "devDependencies": {
     "concurrently": "^9.2.0",
     "electron": "^37.2.2",
+    "electron-builder": "^26.0.12",
     "wait-on": "^8.0.3"
   }
 }
