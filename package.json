@@ -1,0 +1,51 @@
+{
+  "name": "sns-twitter-clone",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "firebase": "^11.10.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.6.3",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "electron": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
+    "dist": "npm run build && electron-builder"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "main": "public/electron.js",
+  "devDependencies": {
+    "concurrently": "^9.2.0",
+    "electron": "^37.2.2",
+    "electron-builder": "^26.0.12",
+    "wait-on": "^8.0.3"
+  }
+}
