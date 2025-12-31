@@ -56,14 +56,14 @@ npm install # または yarn install
 ```
 #### 3. Firebase プロジェクトのセットアップ
  * Firebase コンソールにアクセスし、新しいプロジェクトを作成。
- * プロジェクト内で Authentication を有効にし、使用したいサインインプロバイダ（例: メール/パスワード、Googleなど）を有効にします。
- * Firestore または Realtime Database を作成し、テスト用に適切なセキュリティルールを設定します。（本番環境ではより厳密なルール設定が必要です）
- * プロジェクト設定の「マイアプリ」から「ウェブアプリ」を追加し、表示される firebaseConfig オブジェクトを控えておきます。
+ * プロジェクト内で Authentication を有効にし、使用したいサインインプロバイダ（例: メール/パスワード、Googleなど）を有効にする。
+ * Firestore または Realtime Database を作成し、テスト用に適切なセキュリティルールを設定する。（本番環境ではより厳密なルール設定が必要）
+ * プロジェクト設定の「マイアプリ」から「ウェブアプリ」を追加し、表示される firebaseConfig オブジェクトを控えておく。
 4. Cloudinary アカウントのセットアップ
- * Cloudinary にサインアップまたはログインします。
- * ダッシュボードから、Cloud name, API Key, API Secret を控えておきます。
+ * Cloudinary にサインアップまたはログインする。
+ * ダッシュボードから、Cloud name, API Key, API Secret を控えておく。
 #### 5. 環境変数の設定
-プロジェクトのルートに .env ファイルを作成し、以下の情報を記述します。これらの変数は、アプリケーションのコード内でアクセスされます。
+プロジェクトのルートに .env ファイルを作成し、以下の情報を記述する。これらの変数は、アプリケーションのコード内でアクセスされる。
 ```bash
 # Firebase Configuration
 REACT_APP_FIREBASE_API_KEY=YOUR_FIREBASE_API_KEY
@@ -79,7 +79,7 @@ REACT_APP_CLOUDINARY_CLOUD_NAME=YOUR_CLOUDINARY_CLOUD_NAME
 REACT_APP_CLOUDINARY_API_KEY=YOUR_CLOUDINARY_API_KEY
 REACT_APP_CLOUDINARY_API_SECRET=YOUR_CLOUDINARY_API_SECRET
 ```
-注意: API_SECRET はクライアントサイドのコードに直接含めず、サーバーサイド（例えば、Firebase Functions など）で処理するようにしてください。このクローンアプリの規模によってはクライアントサイドから直接アップロードするケースもありますが、セキュリティを考慮するとサーバーサイドでの処理が推奨されます。
+注意: API_SECRET はクライアントサイドのコードに直接含めず、サーバーサイド（例えば、Firebase Functions など）で処理するようにすること。このクローンアプリの規模によってはクライアントサイドから直接アップロードするケースもあるが、セキュリティを考慮するとサーバーサイドでの処理が推奨される。
 #### 6. アプリケーションの実行
 
 モバイルアプリ (React Native)
@@ -95,6 +95,6 @@ npx react-native run-android
 # 開発モードで実行
 npm run electron-dev # または yarn electron-dev
 ```
-（※package.json の scripts に合わせてコマンドを調整してください）
+（※package.json の scripts に合わせてコマンドを調整）
 ## 👨‍💻 作者
 - [TatsuyaM2667](https://github.com/TatsuyaM2667)
